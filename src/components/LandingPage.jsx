@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../global.css";
 import { IoMdSearch } from "react-icons/io";
 import Upload from "./Upload";
@@ -8,9 +8,117 @@ import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase";
 
 const LandingPage = () => {
+  const [list, setList] = useState([]);
   const navigate = useNavigate();
   const user = auth.currentUser;
+  const [itemToBeSearched, setItemToBeSearched] = useState("");
+  const searchSpace = document.getElementById("srchBar");
   const [holder, setHolder] = React.useState(user ? user.email : "");
+
+  var temp = [
+    {
+      name: "first",
+      owner: "prof1@iitism.ac.in",
+      cid: "random",
+      dept: "Miscellaneous",
+      time: "2024 August",
+    },
+    {
+      name: "b",
+      owner: "prof2@iitism.ac.in",
+      cid: "random",
+      dept: "Mining",
+      time: "2024 August",
+    },
+    {
+      name: "c",
+      owner: "prof3@iitism.ac.in",
+      cid: "random",
+      dept: "ECE",
+      time: "2024 August",
+    },
+    {
+      name: "d",
+      owner: "prof4@iitism.ac.in",
+      cid: "random",
+      dept: "CSE",
+      time: "2024 August",
+    },
+  ];
+
+  function search() {
+    // if (itemToBeSearched === "") {
+    //   setList(temp);
+    // }
+    setList(
+      temp.filter(
+        (item) =>
+          item.name.includes(itemToBeSearched) ||
+          item.owner.includes(itemToBeSearched)
+      )
+    );
+  }
+
+  searchSpace?.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      search();
+    }
+  });
+
+  useState(() => {
+    if (document.getElementById("dept")) {
+      setList(temp);
+    }
+  });
+
+  function filterDept() {
+    console.log("hello");
+    if (document.getElementById("dept")) {
+      const dept = document.getElementById("dept").value;
+      if (dept === "ALL") {
+        console.log("all");
+        setList(temp);
+      } else {
+        setList(temp.filter((item) => item.dept === dept));
+      }
+    }
+  }
+
+  function filterMonth() {
+    if (document.getElementById("month")) {
+      const monthChoosen = document.getElementById("month").value;
+      const monthNames = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+      let monthName = monthNames[Number(monthChoosen.substr(5, 2)) - 1];
+      let selected = monthChoosen.substr(0, 4) + " " + monthName;
+      // console.log(selected);
+
+      if (!(monthChoosen === "")) {
+        setList(temp.filter((item) => item.time === selected));
+      } else if (monthChoosen === "") {
+        setList(temp);
+      }
+    }
+  }
+
+  useEffect(() => {
+    filterDept();
+    filterMonth();
+  }, []);
+
   const signOutUser = async () => {
     try {
       await signOut(auth);
@@ -19,13 +127,25 @@ const LandingPage = () => {
       console.log(error.message);
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      setHolder(user.email);
+    } else {
+      setHolder("");
+      navigate("/");
+    }
+  }, [user, navigate]);
   return (
     <div>
       <div id="navbar">
         <div id="name">DupAlert</div>
         <div id="upload">
           <Upload />
-          <div id="">{holder}</div>
+          <button className="button-68" id="lo" onClick={signOutUser}>
+            LOGOUT
+          </button>
+          <div id="email">{holder[0]?.toUpperCase()}</div>
         </div>
       </div>
       <div id="search">
@@ -33,6 +153,7 @@ const LandingPage = () => {
           type="text"
           id="srchBar"
           placeholder="Enter Name of file or uploader.... "
+          onChange={(e) => setItemToBeSearched(e.target.value)}
         />
         <button className="button-6">
           <IoMdSearch />
@@ -40,8 +161,8 @@ const LandingPage = () => {
       </div>
 
       <div id="filter">
-        <input type="month" id="month" />
-        <select id="dept">
+        <input type="month" id="month" onChange={filterMonth} />
+        <select id="dept" onChange={filterDept}>
           <option value="ALL">ALL</option>
           <option value="Indian Meteorological department (IMD)">
             Indian Meteorological department (IMD)
@@ -56,7 +177,17 @@ const LandingPage = () => {
         </select>
       </div>
       <div id="container">
-        <ListItem />
+        {list.map((item) => {
+          return (
+            <ListItem
+              name={item.name}
+              owner={item.owner}
+              cid={item.cid}
+              dept={item.dept}
+              time={item.time}
+            />
+          );
+        })}
       </div>
       <div id="footer">
         <pre>Made with 💖 © Team Shipwrecked Survivors</pre>

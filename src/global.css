@@ -142,7 +142,23 @@ body {
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  width: 15%;
+  width: 20%;
+}
+
+#email {
+  border: black solid 1px;
+  border-radius: 80px;
+  padding: 2%;
+  width: 10%;
+  display: flex;
+  justify-content: center;
+  background-color: white;
+  font-weight: bold;
+}
+
+#lo {
+  color: white;
+  background-color: red;
 }
 
 /* CSS */

@@ -20,7 +20,7 @@ const Home = () => {
   }, [navigate]);
   return (
     <div className={styles.container}>
-      <div className={styles.welcomeText}>Welcome to the portal</div>
+      <div className={styles.welcomeText}>DupAlert</div>
       <Link to="/login" className={styles.loginLink}>
         Click here to login
       </Link>
