@@ -141,7 +141,7 @@ const LandingPage = () => {
       <div id="navbar">
         <div id="name">DupAlert</div>
         <div id="upload">
-          <Upload />
+          <Upload list={list} setList={setList} holder={holder} />
           <button className="button-68" id="lo" onClick={signOutUser}>
             LOGOUT
           </button>

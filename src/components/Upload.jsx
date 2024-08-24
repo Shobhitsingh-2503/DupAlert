@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import '../global.css'
-// require('dotenv').config()
 import Modal from 'react-modal'
 import { FileUploader } from 'react-drag-drop-files'
 
@@ -15,11 +14,13 @@ const customStyles = {
   },
 }
 
-const Upload = () => {
+const Upload = ({ list, setList, holder }) => {
   let subtitle
   const [modalIsOpen, setIsOpen] = React.useState(false)
   const fileTypes = ['JPG', 'PNG', 'PDF', 'DOC']
   const [file, setFile] = useState(null)
+  const [nfile, setNFile] = useState('')
+  const [dName, setDName] = useState('')
   const handleChange = (file) => {
     setFile(file)
   }
@@ -35,6 +36,45 @@ const Upload = () => {
 
   function closeModal() {
     setIsOpen(false)
+  }
+
+  async function uploadDoc() {
+    if (nfile === '' || dName === '') {
+      alert('all fields are mandatory')
+      closeModal()
+      return
+    }
+    const today = new Date()
+    const month = today.getMonth()
+    const year = today.getFullYear()
+
+    const monthNames = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ]
+
+    let monthName = monthNames[month]
+
+    const currentDate = year + ' ' + monthName
+    var newItem = {
+      name: nfile,
+      owner: holder,
+      cid: 'random',
+      dept: dName,
+      time: currentDate,
+    }
+    setList([...list, newItem])
+    closeModal()
   }
 
   return (
@@ -57,8 +97,16 @@ const Upload = () => {
               type="text"
               placeholder="Enter Name of document..."
               id="nameOfFile"
+              onChange={(e) => {
+                setNFile(e.target.value)
+              }}
             />
-            <select id="selectOption">
+            <select
+              id="selectOption"
+              onChange={(e) => {
+                setDName(e.target.value)
+              }}
+            >
               <option value="ALL">ALL</option>
               <option value="Indian Meteorological department (IMD)">
                 Indian Meteorological department (IMD)
@@ -78,7 +126,7 @@ const Upload = () => {
             types={fileTypes}
           />
           <div id="second">
-            <button className="button-6" id="sbmt">
+            <button className="button-6" id="sbmt" onClick={uploadDoc}>
               Submit
             </button>
           </div>
