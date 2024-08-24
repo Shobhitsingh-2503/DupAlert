@@ -1,0 +1,70 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    background: linear-gradient(to bottom right, #ff416c, #ff4b2b);
+    font-family: "Poppins", sans-serif;
+    text-align: center;
+    color: #ffffff;
+    overflow: hidden;
+    padding: 0 20px;
+  }
+  
+  .welcomeText {
+    font-size: 80px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 2s ease-out forwards;
+    font-family: "Pacifico", cursive;
+  }
+  
+  .loginLink {
+    font-size: 22px;
+    color: #ffd700;
+    cursor: pointer;
+    text-decoration: none;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeIn 2.5s ease-out forwards;
+    margin-top: 20px;
+  }
+  
+  .loginLink:hover {
+    text-decoration: underline;
+  }
+  
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .welcomeText {
+      font-size: 50px;
+    }
+  
+    .loginLink {
+      font-size: 18px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .welcomeText {
+      font-size: 40px;
+    }
+  
+    .loginLink {
+      font-size: 16px;
+    }
+  }
