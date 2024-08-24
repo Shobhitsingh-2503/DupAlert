@@ -1,10 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Kavivanar&display=swap');
 body {
   background-image: url("./img/final.jpeg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
 }
-
+#name{
+  font-family: "Kavivanar", cursive;
+  font-size: 20px;
+}
 #navbar {
   display: flex;
   flex-direction: row;

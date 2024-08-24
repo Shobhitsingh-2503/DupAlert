@@ -1,162 +1,91 @@
-import React, { useEffect, useState } from "react";
-import "../global.css";
-import { IoMdSearch } from "react-icons/io";
-import Upload from "./Upload";
-import ListItem from "./ListItem";
-import { signOut } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
-import { auth, db } from "../firebase";
-import { collection, getDocs } from "firebase/firestore";
-// import {} from 'firebase'
+import React, { useEffect, useState } from 'react'
+import '../global.css'
+import { IoMdSearch } from 'react-icons/io'
+import Upload from './Upload'
+import ListItem from './ListItem'
+import { signOut } from 'firebase/auth'
+import { useNavigate } from 'react-router-dom'
+import { auth, db } from '../firebase'
+import { collection, getDocs } from 'firebase/firestore'
 
 const LandingPage = () => {
-  const [listOfCid, setListOfCid] = useState([]);
-  const [list, setList] = useState([]);
-  const navigate = useNavigate();
-  const user = auth.currentUser;
-  const [itemToBeSearched, setItemToBeSearched] = useState("");
-  const searchSpace = document.getElementById("srchBar");
-  const [holder, setHolder] = React.useState(user ? user.email : "");
+  const [listOfCid, setListOfCid] = useState([])
+  const [list, setList] = useState([])
+  const [filteredList, setFilteredList] = useState([]) // New state for filtered items
+  const [itemToBeSearched, setItemToBeSearched] = useState('')
+  const [selectedDept, setSelectedDept] = useState('ALL')
+  const [selectedMonth, setSelectedMonth] = useState('')
+  const navigate = useNavigate()
+  const user = auth.currentUser
+  const [holder, setHolder] = React.useState(user ? user.email : '')
 
-  var temp = [
-    {
-      name: "NASA Project 1",
-      owner: "prof1@iitism.ac.in",
-      cid: "random",
-      dept: "Miscellaneous",
-      time: "2024 August",
-    },
-    {
-      name: "NASA Project 2",
-      owner: "prof2@iitism.ac.in",
-      cid: "random",
-      dept: "Indian Institute of Tropical Metereologoy (IITM) Pune",
-      time: "2024 August",
-    },
-    {
-      name: "NASA Project 3",
-      owner: "prof3@iitism.ac.in",
-      cid: "random",
-      dept: "National center for medium range weather forecasting (NCMRWF)",
-      time: "2024 August",
-    },
-    {
-      name: "NASA Project 4",
-      owner: "prof4@iitism.ac.in",
-      cid: "random",
-      dept: "CSE",
-      time: "2024 August",
-    },
-  ];
-
-  function search() {
-    setList(
-      list.filter(
-        (item) =>
-          item.name.includes(itemToBeSearched) ||
-          item.owner.includes(itemToBeSearched)
-      )
-    );
-  }
-
-  searchSpace?.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      search();
-    }
-  });
-
-  useState(() => {
-    if (document.getElementById("dept")) {
-      setList(list);
-    }
-  });
-
-  function filterDept() {
-    // console.log("hello");
-    if (document.getElementById("dept")) {
-      const dept = document.getElementById("dept").value;
-      if (dept === "ALL") {
-        // console.log("all");
-        setList(list);
-      } else {
-        setList(list.filter((item) => item.dept === dept));
-      }
-    }
-  }
-
-  function filterMonth() {
-    if (document.getElementById("month")) {
-      const monthChoosen = document.getElementById("month").value;
-      const monthNames = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-      ];
-      let monthName = monthNames[Number(monthChoosen.substr(5, 2)) - 1];
-      let selected = monthChoosen.substr(0, 4) + " " + monthName;
-      // console.log(selected);
-
-      if (!(monthChoosen === "")) {
-        setList(list.filter((item) => item.time === selected));
-      } else if (monthChoosen === "") {
-        setList(list);
-      }
-    }
+  const fetchDataFiles = async () => {
+    const data = await getDocs(collection(db, 'Files'))
+    const fetchedList = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+    setList(fetchedList)
+    setFilteredList(fetchedList)
   }
 
   useEffect(() => {
-    filterDept();
-    filterMonth();
-  }, []);
+    fetchDataFiles()
+  }, [])
+
+  useEffect(() => {
+    let filtered = list
+
+    if (itemToBeSearched) {
+      filtered = filtered.filter(
+        (item) =>
+          item.name.toLowerCase().includes(itemToBeSearched.toLowerCase()) ||
+          item.owner.toLowerCase().includes(itemToBeSearched.toLowerCase()),
+      )
+    }
+
+    if (selectedDept !== 'ALL') {
+      filtered = filtered.filter((item) => item.dept === selectedDept)
+    }
+
+    if (selectedMonth) {
+      const [year, month] = selectedMonth.split('-')
+      const monthNames = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ]
+      const selectedTime = `${year} ${monthNames[parseInt(month, 10) - 1]}`
+      filtered = filtered.filter((item) => item.time === selectedTime)
+    }
+
+    setFilteredList(filtered)
+  }, [itemToBeSearched, selectedDept, selectedMonth, list])
 
   const signOutUser = async () => {
     try {
-      await signOut(auth);
-      navigate("/");
+      await signOut(auth)
+      navigate('/')
     } catch (error) {
-      console.log(error.message);
+      console.log(error.message)
     }
-  };
+  }
 
   useEffect(() => {
     if (user) {
-      setHolder(user.email);
+      setHolder(user.email)
     } else {
-      setHolder("");
-      navigate("/");
+      setHolder('')
+      navigate('/')
     }
-  }, [user, navigate]);
+  }, [user, navigate])
 
-  // useEffect(() => {
-  //   const fetchDataFiles = async () => {
-  //     const data = await getDocs(collection(db, "Files"));
-  //     setList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-  //   };
-  //   fetchDataFiles();
-  // }, [list]);
-  const fetchDataFiles = async () => {
-        const data = await getDocs(collection(db, "Files"));
-        setList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-      };
-      fetchDataFiles();
-
-  // useEffect(() => {
-  //   const fetchDataCID = async () => {
-  //     const data = await getDocs(collection(db, "CID"));
-  //     setListOfCid(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-  //   };
-  //   fetchDataCID();
-  // }, [listOfCid]);
   return (
     <div>
       <div id="navbar">
@@ -182,14 +111,21 @@ const LandingPage = () => {
           placeholder="Enter Name of file or uploader.... "
           onChange={(e) => setItemToBeSearched(e.target.value)}
         />
-        <button className="button-6" onClick={search}>
+        <button
+          className="button-6"
+          onClick={() => setItemToBeSearched(itemToBeSearched)}
+        >
           <IoMdSearch />
         </button>
       </div>
 
       <div id="filter">
-        <input type="month" id="month" onChange={filterMonth} />
-        <select id="dept" onChange={filterDept}>
+        <input
+          type="month"
+          id="month"
+          onChange={(e) => setSelectedMonth(e.target.value)}
+        />
+        <select id="dept" onChange={(e) => setSelectedDept(e.target.value)}>
           <option value="ALL">ALL</option>
           <option value="Indian Meteorological department (IMD)">
             Indian Meteorological department (IMD)
@@ -204,23 +140,22 @@ const LandingPage = () => {
         </select>
       </div>
       <div id="container">
-        {list.map((item) => {
-          return (
-            <ListItem
-              name={item.name}
-              owner={item.owner}
-              cid={item.cid}
-              dept={item.dept}
-              time={item.time}
-            />
-          );
-        })}
+        {filteredList.map((item) => (
+          <ListItem
+            key={item.id}
+            name={item.name}
+            owner={item.owner}
+            cid={item.cid}
+            dept={item.dept}
+            time={item.time}
+          />
+        ))}
       </div>
       <div id="footer">
         <pre>Made with 💖 © Team Shipwrecked Survivors</pre>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LandingPage;
+export default LandingPage
