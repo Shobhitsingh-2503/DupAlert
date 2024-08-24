@@ -146,7 +146,7 @@ const LandingPage = () => {
       setList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
     fetchDataFiles();
-  }, [listOfCid]);
+  }, []);
 
   useEffect(() => {
     const fetchDataCID = async () => {
