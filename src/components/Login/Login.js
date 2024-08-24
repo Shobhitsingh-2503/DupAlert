@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import styles from "./Login.module.css";
 import InputControl from "../InputControl/InputControl";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebase";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [values, setValues] = useState({
@@ -49,7 +51,7 @@ const Login = () => {
     signInWithEmailAndPassword(auth, values.email, values.password)
       .then(() => {
         setLoading(false);
-        navigate("/landing-page");
+        navigate("/landing-page", { replace: true });
       })
       .catch((error) => {
         setLoading(false);
