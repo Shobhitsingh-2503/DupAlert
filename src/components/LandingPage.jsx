@@ -3,15 +3,29 @@ import "../global.css";
 import { IoMdSearch } from "react-icons/io";
 import Upload from "./Upload";
 import ListItem from "./ListItem";
+import { signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { auth } from "../firebase";
 
 const LandingPage = () => {
+  const navigate = useNavigate();
+  const user = auth.currentUser;
+  const [holder, setHolder] = React.useState(user ? user.email : "");
+  const signOutUser = async () => {
+    try {
+      await signOut(auth);
+      navigate("/");
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   return (
     <div>
       <div id="navbar">
         <div id="name">DupAlert</div>
         <div id="upload">
           <Upload />
-          <div id="">Holder</div>
+          <div id="">{holder}</div>
         </div>
       </div>
       <div id="search">
