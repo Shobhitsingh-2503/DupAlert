@@ -8,7 +8,12 @@ const ListItem = ({ name, owner, cid, dept, time }) => {
       <div id="displayOwner">{owner}</div>
       <div id="displayDept">{dept}</div>
       <div id="displayTime">{time}</div>
-      <button className="button-17">Download</button>
+      <a
+        href={`https://bronze-elegant-gopher-211.mypinata.cloud/ipfs/${cid}`}
+        target="_blank"
+      >
+        <button className="button-17">Download</button>
+      </a>
     </div>
   )
 }

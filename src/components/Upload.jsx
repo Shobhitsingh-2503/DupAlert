@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import '../global.css'
 import Modal from 'react-modal'
 import { FileUploader } from 'react-drag-drop-files'
+import ReactLoading from 'react-loading'
 
 const customStyles = {
   content: {
@@ -14,13 +15,18 @@ const customStyles = {
   },
 }
 
-const Upload = ({ list, setList, holder }) => {
+const JWT =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI1ZGE0ODQxZi0yZDRhLTQ3YjktOTk3NC0xYTlmMmY2Mjg4YTAiLCJlbWFpbCI6InNob2JoaXRzaW5naDI1MDMyMDAzQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaW5fcG9saWN5Ijp7InJlZ2lvbnMiOlt7ImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxLCJpZCI6IkZSQTEifSx7ImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxLCJpZCI6Ik5ZQzEifV0sInZlcnNpb24iOjF9LCJtZmFfZW5hYmxlZCI6ZmFsc2UsInN0YXR1cyI6IkFDVElWRSJ9LCJhdXRoZW50aWNhdGlvblR5cGUiOiJzY29wZWRLZXkiLCJzY29wZWRLZXlLZXkiOiIzMzg5Y2MyZDExNTJiYmFhOTgyZiIsInNjb3BlZEtleVNlY3JldCI6IjIxMTBhOGE3OTFiZmQzMmUyMGJmOTQ1YWFjMjM2ZjI0ZTA2MmM0MTNiOWVkNzQ3NGY4YjdhMGVlNjNhNjdiMzYiLCJleHAiOjE3NTYwNjE1ODV9.UE4bhKOQQpAs-Qa_iKqpCL60Ajg9IBJbyQodwHNWAAw'
+
+const Upload = ({ list, setList, holder, setListOfCid, listOfCid }) => {
   let subtitle
   const [modalIsOpen, setIsOpen] = React.useState(false)
   const fileTypes = ['JPG', 'PNG', 'PDF', 'DOC']
   const [file, setFile] = useState(null)
   const [nfile, setNFile] = useState('')
   const [dName, setDName] = useState('')
+  const [loading, setLoading] = useState(false)
+
   const handleChange = (file) => {
     setFile(file)
   }
@@ -38,8 +44,24 @@ const Upload = ({ list, setList, holder }) => {
     setIsOpen(false)
   }
 
+  async function getIpfsHash(file) {
+    const formData = new FormData()
+    formData.append('file', file)
+    const res = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${JWT}`,
+      },
+      body: formData,
+    })
+    const resData = await res.json()
+    return resData.IpfsHash
+  }
+
+  // console.log(JWT)
+
   async function uploadDoc() {
-    if (nfile === '' || dName === '') {
+    if (nfile === '' || dName === '' || file === null) {
       alert('all fields are mandatory')
       closeModal()
       return
@@ -64,16 +86,19 @@ const Upload = ({ list, setList, holder }) => {
     ]
 
     let monthName = monthNames[month]
+    const cid = await getIpfsHash(file)
+    // console.log(process.env.REACT_JWT)
+    setLoading(true)
 
     const currentDate = year + ' ' + monthName
     var newItem = {
       name: nfile,
       owner: holder,
-      cid: 'random',
+      cid: cid,
       dept: dName,
       time: currentDate,
     }
-    setList([...list, newItem])
+    setList([...list, newItem]) //yha pe setLoading false kar diyo
     closeModal()
   }
 
@@ -91,46 +116,50 @@ const Upload = ({ list, setList, holder }) => {
         <h2 ref={(_subtitle) => (subtitle = _subtitle)} align="center">
           UPLOAD
         </h2>
-        <div id="inside">
-          <div id="first">
-            <input
-              type="text"
-              placeholder="Enter Name of document..."
-              id="nameOfFile"
-              onChange={(e) => {
-                setNFile(e.target.value)
-              }}
+        {loading ? (
+          <ReactLoading type="spokes" color="green" height={100} width={100} />
+        ) : (
+          <div id="inside">
+            <div id="first">
+              <input
+                autoComplete="off"
+                type="text"
+                placeholder="Enter Name of document..."
+                id="nameOfFile"
+                onChange={(e) => {
+                  setNFile(e.target.value)
+                }}
+              />
+              <select
+                id="selectOption"
+                onChange={(e) => {
+                  setDName(e.target.value)
+                }}
+              >
+                <option value="Indian Meteorological department (IMD)">
+                  Indian Meteorological department (IMD)
+                </option>
+                <option value="National center for medium range weather forecasting (NCMRWF)">
+                  National center for medium range weather forecasting (NCMRWF)
+                </option>
+                <option value="Indian Institute of Tropical Metereologoy (IITM) Pune">
+                  Indian Institute of Tropical Metereologoy (IITM) Pune
+                </option>
+                <option value="Miscellaneous">Miscellaneous</option>
+              </select>
+            </div>
+            <FileUploader
+              handleChange={handleChange}
+              name="file"
+              types={fileTypes}
             />
-            <select
-              id="selectOption"
-              onChange={(e) => {
-                setDName(e.target.value)
-              }}
-            >
-              <option value="ALL">ALL</option>
-              <option value="Indian Meteorological department (IMD)">
-                Indian Meteorological department (IMD)
-              </option>
-              <option value="National center for medium range weather forecasting (NCMRWF)">
-                National center for medium range weather forecasting (NCMRWF)
-              </option>
-              <option value="Indian Institute of Tropical Metereologoy (IITM) Pune">
-                Indian Institute of Tropical Metereologoy (IITM) Pune
-              </option>
-              <option value="Miscellaneous">Miscellaneous</option>
-            </select>
+            <div id="second">
+              <button className="button-6" id="sbmt" onClick={uploadDoc}>
+                Submit
+              </button>
+            </div>
           </div>
-          <FileUploader
-            handleChange={handleChange}
-            name="file"
-            types={fileTypes}
-          />
-          <div id="second">
-            <button className="button-6" id="sbmt" onClick={uploadDoc}>
-              Submit
-            </button>
-          </div>
-        </div>
+        )}
       </Modal>
     </div>
   )

@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { auth } from '../firebase'
 
 const LandingPage = () => {
+  const [listOfCid, setListOfCid] = useState([])
   const [list, setList] = useState([])
   const navigate = useNavigate()
   const user = auth.currentUser
@@ -141,7 +142,13 @@ const LandingPage = () => {
       <div id="navbar">
         <div id="name">DupAlert</div>
         <div id="upload">
-          <Upload list={list} setList={setList} holder={holder} />
+          <Upload
+            list={list}
+            setList={setList}
+            holder={holder}
+            listOfCid={listOfCid}
+            setListOfCid={setListOfCid}
+          />
           <button className="button-68" id="lo" onClick={signOutUser}>
             LOGOUT
           </button>

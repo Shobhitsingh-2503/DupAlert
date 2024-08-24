@@ -20,7 +20,7 @@ const Home = () => {
   }, [navigate]);
   return (
     <div className={styles.container}>
-      <div className={styles.welcomeText}>DupAlert</div>
+      <div className={styles.welcomeText}>DupAlerts</div>
       <Link to="/login" className={styles.loginLink}>
         Click here to login
       </Link>
