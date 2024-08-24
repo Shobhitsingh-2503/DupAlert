@@ -1,54 +1,54 @@
-import React, { useEffect, useState } from 'react'
-import '../global.css'
-import { IoMdSearch } from 'react-icons/io'
-import Upload from './Upload'
-import ListItem from './ListItem'
-import { signOut } from 'firebase/auth'
-import { useNavigate } from 'react-router-dom'
-import { auth, db } from '../firebase'
-import { getDocs } from 'firebase/firestore'
+import React, { useEffect, useState } from "react";
+import "../global.css";
+import { IoMdSearch } from "react-icons/io";
+import Upload from "./Upload";
+import ListItem from "./ListItem";
+import { signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { auth, db } from "../firebase";
+import { collection, getDocs } from "firebase/firestore";
 // import {} from 'firebase'
 
 const LandingPage = () => {
-  const [listOfCid, setListOfCid] = useState([])
-  const [list, setList] = useState([])
-  const navigate = useNavigate()
-  const user = auth.currentUser
-  const [itemToBeSearched, setItemToBeSearched] = useState('')
-  const searchSpace = document.getElementById('srchBar')
-  const [holder, setHolder] = React.useState(user ? user.email : '')
+  const [listOfCid, setListOfCid] = useState([]);
+  const [list, setList] = useState([]);
+  const navigate = useNavigate();
+  const user = auth.currentUser;
+  const [itemToBeSearched, setItemToBeSearched] = useState("");
+  const searchSpace = document.getElementById("srchBar");
+  const [holder, setHolder] = React.useState(user ? user.email : "");
 
   var temp = [
     {
-      name: 'NASA Project 1',
-      owner: 'prof1@iitism.ac.in',
-      cid: 'random',
-      dept: 'Miscellaneous',
-      time: '2024 August',
+      name: "NASA Project 1",
+      owner: "prof1@iitism.ac.in",
+      cid: "random",
+      dept: "Miscellaneous",
+      time: "2024 August",
     },
     {
-      name: 'NASA Project 2',
-      owner: 'prof2@iitism.ac.in',
-      cid: 'random',
-      dept: 'Indian Institute of Tropical Metereologoy (IITM) Pune',
-      time: '2024 August',
+      name: "NASA Project 2",
+      owner: "prof2@iitism.ac.in",
+      cid: "random",
+      dept: "Indian Institute of Tropical Metereologoy (IITM) Pune",
+      time: "2024 August",
     },
     {
-      name: 'NASA Project 3',
-      owner: 'prof3@iitism.ac.in',
-      cid: 'random',
-      dept: 'National center for medium range weather forecasting (NCMRWF)',
-      time: '2024 August',
+      name: "NASA Project 3",
+      owner: "prof3@iitism.ac.in",
+      cid: "random",
+      dept: "National center for medium range weather forecasting (NCMRWF)",
+      time: "2024 August",
     },
     {
-      name: 'NASA Project 4',
-      owner: 'prof4@iitism.ac.in',
-      cid: 'random',
-      dept: 'CSE',
-      time: '2024 August',
+      name: "NASA Project 4",
+      owner: "prof4@iitism.ac.in",
+      cid: "random",
+      dept: "CSE",
+      time: "2024 August",
     },
-  ]
-  
+  ];
+
   function search() {
     // if (itemToBeSearched === "") {
     //   setList(temp);
@@ -57,88 +57,104 @@ const LandingPage = () => {
       temp.filter(
         (item) =>
           item.name.includes(itemToBeSearched) ||
-          item.owner.includes(itemToBeSearched),
-      ),
-    )
+          item.owner.includes(itemToBeSearched)
+      )
+    );
   }
 
-  searchSpace?.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault()
-      search()
+  searchSpace?.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      search();
     }
-  })
+  });
 
   useState(() => {
-    if (document.getElementById('dept')) {
-      setList(temp)
+    if (document.getElementById("dept")) {
+      setList(temp);
     }
-  })
+  });
 
   function filterDept() {
-    console.log('hello')
-    if (document.getElementById('dept')) {
-      const dept = document.getElementById('dept').value
-      if (dept === 'ALL') {
-        console.log('all')
-        setList(temp)
+    console.log("hello");
+    if (document.getElementById("dept")) {
+      const dept = document.getElementById("dept").value;
+      if (dept === "ALL") {
+        console.log("all");
+        setList(temp);
       } else {
-        setList(temp.filter((item) => item.dept === dept))
+        setList(temp.filter((item) => item.dept === dept));
       }
     }
   }
 
   function filterMonth() {
-    if (document.getElementById('month')) {
-      const monthChoosen = document.getElementById('month').value
+    if (document.getElementById("month")) {
+      const monthChoosen = document.getElementById("month").value;
       const monthNames = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
-      ]
-      let monthName = monthNames[Number(monthChoosen.substr(5, 2)) - 1]
-      let selected = monthChoosen.substr(0, 4) + ' ' + monthName
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+      let monthName = monthNames[Number(monthChoosen.substr(5, 2)) - 1];
+      let selected = monthChoosen.substr(0, 4) + " " + monthName;
       // console.log(selected);
 
-      if (!(monthChoosen === '')) {
-        setList(temp.filter((item) => item.time === selected))
-      } else if (monthChoosen === '') {
-        setList(temp)
+      if (!(monthChoosen === "")) {
+        setList(temp.filter((item) => item.time === selected));
+      } else if (monthChoosen === "") {
+        setList(temp);
       }
     }
   }
 
   useEffect(() => {
-    filterDept()
-    filterMonth()
-  }, [])
+    filterDept();
+    filterMonth();
+  }, []);
 
   const signOutUser = async () => {
     try {
-      await signOut(auth)
-      navigate('/')
+      await signOut(auth);
+      navigate("/");
     } catch (error) {
-      console.log(error.message)
+      console.log(error.message);
     }
-  }
+  };
 
   useEffect(() => {
     if (user) {
-      setHolder(user.email)
+      setHolder(user.email);
     } else {
-      setHolder('')
-      navigate('/')
+      setHolder("");
+      navigate("/");
     }
-  }, [user, navigate])
+  }, [user, navigate]);
+
+  useEffect(() => {
+    const fetchDataFiles = async () => {
+      const data = await getDocs(collection(db, "Files"));
+      setList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+    fetchDataFiles();
+  }, [listOfCid]);
+
+  useEffect(() => {
+    const fetchDataCID = async () => {
+      const data = await getDocs(collection(db, "CID"));
+      setListOfCid(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+    fetchDataCID();
+  }, [list]);
   return (
     <div>
       <div id="navbar">
@@ -195,14 +211,14 @@ const LandingPage = () => {
               dept={item.dept}
               time={item.time}
             />
-          )
+          );
         })}
       </div>
       <div id="footer">
         <pre>Made with 💖 © Team Shipwrecked Survivors</pre>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default LandingPage
+export default LandingPage;
