@@ -17,28 +17,28 @@ const LandingPage = () => {
 
   var temp = [
     {
-      name: 'first',
+      name: 'NASA Project 1',
       owner: 'prof1@iitism.ac.in',
       cid: 'random',
       dept: 'Miscellaneous',
       time: '2024 August',
     },
     {
-      name: 'b',
+      name: 'NASA Project 2',
       owner: 'prof2@iitism.ac.in',
       cid: 'random',
-      dept: 'Mining',
+      dept: 'Indian Institute of Tropical Metereologoy (IITM) Pune',
       time: '2024 August',
     },
     {
-      name: 'c',
+      name: 'NASA Project 3',
       owner: 'prof3@iitism.ac.in',
       cid: 'random',
-      dept: 'ECE',
+      dept: 'National center for medium range weather forecasting (NCMRWF)',
       time: '2024 August',
     },
     {
-      name: 'd',
+      name: 'NASA Project 4',
       owner: 'prof4@iitism.ac.in',
       cid: 'random',
       dept: 'CSE',

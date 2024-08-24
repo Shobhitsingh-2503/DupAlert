@@ -237,6 +237,12 @@ body {
   padding: 0.3%;
   align-items: center;
   justify-content: space-around;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 #filter {
   margin-top: 1%;
@@ -421,4 +427,14 @@ body {
 #sbmt{
   margin-top: 2%;
   background-color: greenyellow;
+}
+
+#displayName{
+  width: 20%;
+}
+#displayDept{
+  width: 20%;
+}
+#displayOwner{
+  width: 20%;
 }
