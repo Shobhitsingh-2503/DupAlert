@@ -9,7 +9,10 @@ const LandingPage = () => {
     <div>
       <div id="navbar">
         <div id="name">DupAlert</div>
-        <div id="">Holder</div>
+        <div id="upload">
+          <Upload />
+          <div id="">Holder</div>
+        </div>
       </div>
       <div id="search">
         <input
@@ -17,9 +20,11 @@ const LandingPage = () => {
           id="srchBar"
           placeholder="Enter Name of file or uploader.... "
         />
-        <IoMdSearch id="srch" />
+        <button className="button-6">
+          <IoMdSearch />
+        </button>
       </div>
-      <Upload />
+
       <div id="filter">
         <input type="month" id="month" />
         <select id="dept">
@@ -40,7 +45,7 @@ const LandingPage = () => {
         <ListItem />
       </div>
       <div id="footer">
-        <pre>Made with 💖 © Team </pre>
+        <pre>Made with 💖 © Team Shipwrecked Survivors</pre>
       </div>
     </div>
   );
