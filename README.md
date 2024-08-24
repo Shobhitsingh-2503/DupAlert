@@ -1,3 +1,34 @@
+# Overview
+DupAlerts, the Data Download Duplication Alert System (DDAS) is designed to optimize resource usage by preventing duplicate data downloads within an institutional environment. The system alerts users when they attempt to download a dataset that has already been downloaded on the system, thereby avoiding redundant downloads, saving bandwidth, and streamlining data management processes.
+
+# Features
+## IPFS Hashing for Duplicate Detection: 
+  Uses IPFS hashing to uniquely identify files and detect duplicates, even if file names differ.
+## Download Alerts: 
+  Notifies users if a file they are downloading already exists on the system, providing the existing file's location and timestamp.
+## Real-Time Data Management with Firebase: 
+  Synchronizes dataset downloaded by any user, ensuring up-to-date information and alerts.
+## Intuitive UI:
+  Easy-to-navigate interface with search and filter functionality for efficient data access.
+
+# Future Improvement Scope
+## Local Download Alerts: 
+  Warns users before downloading if the file has already been downloaded by them on their local system.
+## Role-Based Access Control: 
+  Only authorized users can approve downloads and delete files, enhancing security and data integrity.
+## User Feedback Mechanism: 
+  Allows users to report false positives and suggest improvements, contributing to the system's continuous refinement.
+
+
+# Tech Stack
+## React:
+  Front-end framework for building the user interface.
+## IPFS: 
+  Decentralized storage system for content-addressable file storage.
+## Firebase: 
+  Real-time database and authentication services for seamless data management.
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
