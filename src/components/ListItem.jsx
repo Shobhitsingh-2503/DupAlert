@@ -9,7 +9,7 @@ const ListItem = () => {
       <div>UPLOADED BY</div>
       <div>dept</div>
       <div>date</div>
-      <FiDownload />
+      <button className="button-17">Download</button>
     </div>
   )
 }
