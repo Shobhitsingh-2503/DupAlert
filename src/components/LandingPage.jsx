@@ -5,7 +5,9 @@ import Upload from './Upload'
 import ListItem from './ListItem'
 import { signOut } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
-import { auth } from '../firebase'
+import { auth, db } from '../firebase'
+import { getDocs } from 'firebase/firestore'
+// import {} from 'firebase'
 
 const LandingPage = () => {
   const [listOfCid, setListOfCid] = useState([])
@@ -46,7 +48,7 @@ const LandingPage = () => {
       time: '2024 August',
     },
   ]
-
+  
   function search() {
     // if (itemToBeSearched === "") {
     //   setList(temp);

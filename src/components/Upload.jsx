@@ -3,6 +3,8 @@ import '../global.css'
 import Modal from 'react-modal'
 import { FileUploader } from 'react-drag-drop-files'
 import ReactLoading from 'react-loading'
+import { addDoc, collection } from 'firebase/firestore'
+import {db} from '../firebase'
 
 const customStyles = {
   content: {
@@ -91,14 +93,30 @@ const Upload = ({ list, setList, holder, setListOfCid, listOfCid }) => {
     setLoading(true)
 
     const currentDate = year + ' ' + monthName
-    var newItem = {
+    // var newItem = {
+    //   name: nfile,
+    //   owner: holder,
+    //   cid: cid,
+    //   dept: dName,
+    //   time: currentDate,
+    // }
+    const fileRef = await addDoc( collection(db, "Files", {
       name: nfile,
       owner: holder,
       cid: cid,
       dept: dName,
       time: currentDate,
-    }
-    setList([...list, newItem]) //yha pe setLoading false kar diyo
+    }))
+    console.log(fileRef)
+    const cidRef = await addDoc( collection(db, "CID", {
+      cid: cid,
+    }))
+    console.log(cidRef)
+    setList([...list, fileRef])
+    setListOfCid([...listOfCid, cidRef])
+    // setList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    setLoading(false)
+    //yha pe setLoading false kar diyo
     closeModal()
   }
 
