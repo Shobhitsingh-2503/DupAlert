@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import "./global.css";
+import { IoMdSearch } from "react-icons/io";
+import Upload from "./components/Upload";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <div id="navbar">
+        <div id="name">DupAlert</div>
+        <div id="">Holder</div>
+      </div>
+      <div id="search">
+        <input
+          type="text"
+          id="srchBar"
+          placeholder="Enter Name or uploader.... "
+        />
+        <IoMdSearch id="srch" />
+      </div>
+      <Upload />
+      <div id="container"></div>
+      <div id="footer">
+        <pre>Made with 💖 © Team </pre>
+      </div>
     </div>
   );
 }
