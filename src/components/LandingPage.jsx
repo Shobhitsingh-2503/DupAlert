@@ -50,11 +50,8 @@ const LandingPage = () => {
   ];
 
   function search() {
-    // if (itemToBeSearched === "") {
-    //   setList(temp);
-    // }
     setList(
-      temp.filter(
+      list.filter(
         (item) =>
           item.name.includes(itemToBeSearched) ||
           item.owner.includes(itemToBeSearched)
@@ -71,19 +68,19 @@ const LandingPage = () => {
 
   useState(() => {
     if (document.getElementById("dept")) {
-      setList(temp);
+      setList(list);
     }
   });
 
   function filterDept() {
-    console.log("hello");
+    // console.log("hello");
     if (document.getElementById("dept")) {
       const dept = document.getElementById("dept").value;
       if (dept === "ALL") {
-        console.log("all");
-        setList(temp);
+        // console.log("all");
+        setList(list);
       } else {
-        setList(temp.filter((item) => item.dept === dept));
+        setList(list.filter((item) => item.dept === dept));
       }
     }
   }
@@ -110,9 +107,9 @@ const LandingPage = () => {
       // console.log(selected);
 
       if (!(monthChoosen === "")) {
-        setList(temp.filter((item) => item.time === selected));
+        setList(list.filter((item) => item.time === selected));
       } else if (monthChoosen === "") {
-        setList(temp);
+        setList(list);
       }
     }
   }
@@ -140,21 +137,26 @@ const LandingPage = () => {
     }
   }, [user, navigate]);
 
-  useEffect(() => {
-    const fetchDataFiles = async () => {
-      const data = await getDocs(collection(db, "Files"));
-      setList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    };
-    fetchDataFiles();
-  }, [listOfCid]);
+  // useEffect(() => {
+  //   const fetchDataFiles = async () => {
+  //     const data = await getDocs(collection(db, "Files"));
+  //     setList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  //   };
+  //   fetchDataFiles();
+  // }, [list]);
+  const fetchDataFiles = async () => {
+        const data = await getDocs(collection(db, "Files"));
+        setList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      };
+      fetchDataFiles();
 
-  useEffect(() => {
-    const fetchDataCID = async () => {
-      const data = await getDocs(collection(db, "CID"));
-      setListOfCid(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    };
-    fetchDataCID();
-  }, [list]);
+  // useEffect(() => {
+  //   const fetchDataCID = async () => {
+  //     const data = await getDocs(collection(db, "CID"));
+  //     setListOfCid(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  //   };
+  //   fetchDataCID();
+  // }, [listOfCid]);
   return (
     <div>
       <div id="navbar">
