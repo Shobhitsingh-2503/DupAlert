@@ -442,3 +442,21 @@ body {
 #displayOwner{
   width: 20%;
 }
+
+#logo{
+  color: red;
+  font-size: 100px;
+}
+#inside2{
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: "Kavivanar", cursive;
+}
+#error{
+  margin: 5%;
+  width: 200px;
+  font-family: "Kavivanar", cursive;
+}

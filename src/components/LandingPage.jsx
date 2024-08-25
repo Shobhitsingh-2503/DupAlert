@@ -9,7 +9,6 @@ import { auth, db } from '../firebase'
 import { collection, getDocs } from 'firebase/firestore'
 
 const LandingPage = () => {
-  const [listOfCid, setListOfCid] = useState([])
   const [list, setList] = useState([])
   const [filteredList, setFilteredList] = useState([]) // New state for filtered items
   const [itemToBeSearched, setItemToBeSearched] = useState('')
@@ -91,13 +90,7 @@ const LandingPage = () => {
       <div id="navbar">
         <div id="name">DupAlert</div>
         <div id="upload">
-          <Upload
-            list={list}
-            setList={setList}
-            holder={holder}
-            listOfCid={listOfCid}
-            setListOfCid={setListOfCid}
-          />
+          <Upload list={list} setList={setList} holder={holder} />
           <button className="button-68" id="lo" onClick={signOutUser}>
             LOGOUT
           </button>
