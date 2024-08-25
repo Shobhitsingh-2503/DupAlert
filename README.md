@@ -1,4 +1,4 @@
-# DupAlerts : Smart cloud solution
+# DupAlerts
 
 ## SIH1659 : Data download Duplication Alert System (DDAS)
 
