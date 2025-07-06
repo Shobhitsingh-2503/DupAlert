@@ -34,6 +34,10 @@ This system is applicable across various fields and industries, including:
 
 ### [Watch the demo video here!](https://drive.google.com/file/d/1fx6PEvnsBxaBii4cKfxjnC9FQOUsFhwi/view?usp=sharing)
 
+### Credentials for use 
+Username - shobhit@email.com
+Password - A1234@#$
+
 
 ### Future Improvement Scope
 * Local Download Alerts: Warns users before downloading if the file has already been downloaded by them on their local system.
